@@ -30,6 +30,6 @@ print("Median =", median)
 print("Mode =", mode)
 print("Variance =", variance)
 
-
+]]]
 print("\nConclusion:")
 print("Mean, median, mode and variance were successfully calculated using NumPy and Pandas.")

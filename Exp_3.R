@@ -1,44 +1,64 @@
-
+# Install packages if needed:
 install.packages("corrplot")
 install.packages("ggplot2")
-
 
 library(corrplot)
 library(ggplot2)
 
+set.seed(42)
 
-data <- read.csv("C:\\Users\\dadee\\Downloads\\datascience.csv")
+n <- 200
 
-
-numeric_data <- data[, c("Age", "StudyHours", "Marks", "Attendance")]
-
-
-correlation_matrix <- cor(numeric_data)
-
-print(round(correlation_matrix, 2))
-
-
-corrplot(
-  correlation_matrix,
-  method = "color",
-  addCoef.col = "black",
-  type = "full",
-  tl.col = "black",
-  tl.srt = 45
+data <- data.frame(
+  date = seq(as.Date("2024-01-01"), by = "day", length.out = n),
+  category = sample(c("A", "B", "C", "D"), size = n, replace = TRUE),
+  category_column = sample(c("A", "B", "C", "D"), size = n, replace = TRUE),
+  column_1 = rnorm(n, mean = 60, sd = 10),
+  value = rnorm(n, mean = 50, sd = 15),
+  value_column = rnorm(n, mean = 100, sd = 20)
 )
 
-title("Correlation Heatmap")
+# Add 150 to the first five values
+data$value_column[1:5] <- data$value_column[1:5] + 150
 
-plot2 <- ggplot(
+cat("\nFirst Five Rows:\n")
+print(head(data))
+
+# Select numerical columns
+numeric_data <- data[c("column_1", "value", "value_column")]
+
+# Calculate correlation matrix
+correlation <- cor(numeric_data)
+
+cat("\nCorrelation Matrix:\n")
+print(correlation)
+
+# Correlation plot
+corrplot(
+  correlation,
+  method = "circle",
+  type = "upper",
+  addCoef.col = "black",
+  tl.col = "black",
+  title = "Correlation Plot",
+  mar = c(0, 0, 2, 0)
+)
+
+# Scatter plot with regression line
+p <- ggplot(
   data,
-  aes(x = StudyHours, y = Marks)
+  aes(x = column_1, y = value)
 ) +
   geom_point() +
+  geom_smooth(
+    method = "lm",
+    se = FALSE
+  ) +
   labs(
-    title = "Study Hours vs Marks",
-    x = "Study Hours",
-    y = "Marks"
+    title = "Column 1 vs Value",
+    x = "Column 1",
+    y = "Value"
   ) +
   theme_minimal()
 
-print(plot2)
+print(p)
