@@ -50,7 +50,7 @@ plt.title("Correlation Heatmap")
 plt.tight_layout()
 
 # Save heatmap
-output_path = os.path.join(os.getcwd(), "correlation.png")
+output_path = os.path.join(os.getcwd(), "correlation.png") 
 plt.savefig(output_path, dpi=150)
 
 print("\nHeatmap saved at:", output_path)
